@@ -225,6 +225,8 @@ public class RsaKey {
 		freeResources();
 	}
 
+//	public native void testBytes(byte[] data);
+
 	/**
 	 * @return true if this instance contains private key
 	 */

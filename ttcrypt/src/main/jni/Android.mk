@@ -1,3 +1,5 @@
+TARGET_PREFER_32_BIT := true
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)

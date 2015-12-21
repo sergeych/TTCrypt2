@@ -1,0 +1,3 @@
+[submodule "ttcrypt/src/main/jni/gmp"]
+	path = ttcrypt/src/main/jni/gmp
+	url = git://github.com/Rupan/gmp.git

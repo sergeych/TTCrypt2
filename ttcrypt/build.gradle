@@ -2,12 +2,16 @@
 apply plugin: 'com.android.library'
 
 android {
+    defaultConfig {
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
@@ -22,18 +26,30 @@ android {
             jni.srcDirs = []
         }
     }
-
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
     }
 
     task ndkBuild(type: Exec) {
-        commandLine '/Users/sergeych/adt-bundle-mac/sdk/ndk-bundle/ndk-build', '-C', file('src/main/jni').absolutePath
+        commandLine '/Users/sergeych/adt-bundle-mac/sdk/ndk-bundle/ndk-build',
+                'NDK_LIBS_OUT='+file('src/main/jniLibs').absolutePath,
+                '-C',
+                file('src/main/jni').absolutePath
+    }
+
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    productFlavors {
     }
 }
 
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'src/main/lib', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
 }

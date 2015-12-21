@@ -6,7 +6,7 @@ NDK_TOOLCHAIN_VERSION := 4.8
 APP_STL := gnustl_static
 # then enable c++11 extentions in source code
 
-APP_ABI := all
-#APP_ABI := x86 armeabi-v7a mips armeabi
+#APP_ABI := all
+TARGET_PREFER_32_BIT := true
+APP_ABI := x86 armeabi-v7a mips armeabi
 #APP_ABI := armeabi
-
