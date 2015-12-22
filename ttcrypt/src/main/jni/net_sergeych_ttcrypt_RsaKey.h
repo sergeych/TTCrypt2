@@ -99,6 +99,11 @@ JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_freeResources
 JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_staticInit
   (JNIEnv *, jclass);
 
+
+JNIEXPORT jobjectArray JNICALL
+Java_net_sergeych_ttcrypt_RsaKey_factorize(JNIEnv *env, jclass type, jbyteArray product_);
+
+
 #ifdef __cplusplus
 }
 #endif

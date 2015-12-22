@@ -1,5 +1,6 @@
 package net.sergeych.ttcrypt;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -225,7 +226,7 @@ public class RsaKey {
 		freeResources();
 	}
 
-//	public native void testBytes(byte[] data);
+	public native void testBytes(byte[] data);
 
 	/**
 	 * @return true if this instance contains private key
@@ -273,6 +274,30 @@ public class RsaKey {
 	public int hashCode() {
 		return getN().hashCode();
 	};
+
+
+	/**
+	 * Factorize composite to prime factors using Pollard's Rho algorithm
+	 * @param composite
+	 * @return array of prime factors
+	 */
+	static public BigInteger[] factorize(BigInteger composite) {
+		byte[][] result = factorize(composite.toByteArray());
+		BigInteger[] factors = new BigInteger[result.length];
+		for(int i=0; i<result.length; i++ ) {
+			factors[i] = new BigInteger(result[i]);
+		}
+		return factors;
+	}
+
+	/**
+	 * Factorize composite to prime factors using Pollard's Rho algorithm, woring with raw
+	 * byte arrays holding big integer numbers.
+	 *
+	 * @param composite
+	 * @return array of prime factors
+	 */
+	static public native byte[][] factorize(byte[] product);
 
 	private final native void generate(int bitStrength);
 

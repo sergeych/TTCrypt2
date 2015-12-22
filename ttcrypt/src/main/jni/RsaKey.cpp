@@ -10,6 +10,7 @@ extern "C" {
 #include "net_sergeych_ttcrypt_RsaKey_Error.h"
 
 #include "ttcrypt/rsa_key.h"
+#include "ttcrypt/pollard_rho.h"
 
 using namespace ttcrypt;
 
@@ -32,7 +33,7 @@ JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_freeResources
 (JNIEnv *env, jobject obj) {
 	auto key = rsa(env, obj);
 	if( key )
-	delete key;
+		delete key;
 	env->SetLongField(obj, instanceId, 0);
 }
 
@@ -203,3 +204,19 @@ JNIEXPORT jboolean JNICALL Java_net_sergeych_ttcrypt_RsaKey_hasPrivate(
 	});
 }
 
+JNIEXPORT jobjectArray JNICALL
+Java_net_sergeych_ttcrypt_RsaKey_factorize(JNIEnv *env, jclass type, jbyteArray product_) {
+	return protect<jobjectArray>(env,
+							   [=] {
+								   auto source = array2buffer(env, product_);
+								   vector<ttcrypt::big_integer> factors = ttcrypt::pollard_rho::factorize(source, 25);
+
+								   jobjectArray array = env->NewObjectArray(factors.size(), env->FindClass("[B"),
+																			nullptr );
+								   for(unsigned i=0; i<factors.size(); i++) {
+									   jbyteArray element = buffer2array(env, factors[i].to_byte_buffer() );
+									   env->SetObjectArrayElement(array, i, element);
+								   }
+								   return array;
+							   });
+}
