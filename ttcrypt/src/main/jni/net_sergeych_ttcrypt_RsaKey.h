@@ -103,6 +103,11 @@ JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_staticInit
 JNIEXPORT jobjectArray JNICALL
 Java_net_sergeych_ttcrypt_RsaKey_factorize(JNIEnv *env, jclass type, jbyteArray product_);
 
+JNIEXPORT void JNICALL
+Java_net_sergeych_ttcrypt_RJ256__1cipherBlock(JNIEnv *env, jclass type, jboolean encrypt,
+                                              jbyteArray key_, jbyteArray block_);
+
+
 
 #ifdef __cplusplus
 }

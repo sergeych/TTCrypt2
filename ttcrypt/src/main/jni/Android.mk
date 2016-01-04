@@ -21,7 +21,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../..
 LOCAL_MODULE    := ttcrypt
 LOCAL_SRC_FILES := RsaKey.cpp ttcrypt/big_integer.cpp ttcrypt/byte_buffer.cpp ttcrypt/common_utils.cpp
 LOCAL_SRC_FILES += ttcrypt/pollard_rho.cpp ttcrypt/rsa_key.cpp ttcrypt/text_utils.cpp ttcrypt/ttcrypt.cpp
-LOCAL_SRC_FILES += ttcrypt/sha1.cpp ttcrypt/sha256.c
+LOCAL_SRC_FILES += ttcrypt/sha1.cpp ttcrypt/sha256.c ttcrypt/rj256.c
 
 LOCAL_SHARED_LIBRARIES = gmp
 

@@ -11,6 +11,7 @@ extern "C" {
 
 #include "ttcrypt/rsa_key.h"
 #include "ttcrypt/pollard_rho.h"
+#include "ttcrypt/rijndael.h"
 
 using namespace ttcrypt;
 
@@ -219,4 +220,21 @@ Java_net_sergeych_ttcrypt_RsaKey_factorize(JNIEnv *env, jclass type, jbyteArray 
 								   }
 								   return array;
 							   });
+}
+
+JNIEXPORT void JNICALL
+Java_net_sergeych_ttcrypt_RJ256__1cipherBlock(JNIEnv *env, jclass type, jboolean encrypt,
+											  jbyteArray key_, jbyteArray block_) {
+	jbyte *key = env->GetByteArrayElements(key_, NULL);
+	jbyte *block = env->GetByteArrayElements(block_, NULL);
+
+	RI ri;
+	rj256_set_key( &ri, (byte *) key);
+	if( encrypt )
+		rj256_encrypt( &ri, (byte*) block );
+	else
+		rj256_decrypt( &ri, (byte*) block );
+
+	env->ReleaseByteArrayElements(key_, key, 0);
+	env->ReleaseByteArrayElements(block_, block, 0);
 }
