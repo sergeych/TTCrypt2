@@ -317,6 +317,9 @@ public class RsaKey {
 	// This implements custom static initialization
 	private native static void staticInit();
 
+	public static void initLibrary() {
+	}
+
 	static {
 		// The order is VITAL!
 		System.loadLibrary("gmp");

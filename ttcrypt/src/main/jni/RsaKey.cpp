@@ -222,19 +222,61 @@ Java_net_sergeych_ttcrypt_RsaKey_factorize(JNIEnv *env, jclass type, jbyteArray 
 							   });
 }
 
-JNIEXPORT void JNICALL
-Java_net_sergeych_ttcrypt_RJ256__1cipherBlock(JNIEnv *env, jclass type, jboolean encrypt,
-											  jbyteArray key_, jbyteArray block_) {
-	jbyte *key = env->GetByteArrayElements(key_, NULL);
-	jbyte *block = env->GetByteArrayElements(block_, NULL);
+//JNIEXPORT void JNICALL
+//Java_net_sergeych_ttcrypt_RJ256__1cipherBlock(JNIEnv *env, jclass type, jboolean encrypt,
+//											  jbyteArray key_, jbyteArray block_) {
+//	jbyte *key = env->GetByteArrayElements(key_, NULL);
+//	jbyte *block = env->GetByteArrayElements(block_, NULL);
+//
+//	RI ri;
+//	rj256_set_key( &ri, (byte *) key);
+//	if( encrypt )
+//		rj256_encrypt( &ri, (byte*) block );
+//	else
+//		rj256_decrypt( &ri, (byte*) block );
+//
+//	env->ReleaseByteArrayElements(key_, key, 0);
+//	env->ReleaseByteArrayElements(block_, block, 0);
+//}
 
-	RI ri;
-	rj256_set_key( &ri, (byte *) key);
-	if( encrypt )
-		rj256_encrypt( &ri, (byte*) block );
-	else
-		rj256_decrypt( &ri, (byte*) block );
+JNIEXPORT void JNICALL
+Java_net_sergeych_ttcrypt_RJ256__1setKey(JNIEnv *env, jobject instance, jbyteArray key_) {
+	jbyte *key = env->GetByteArrayElements(key_, NULL);
+
+	RI* ri = (RI*) env->GetLongField(instance, instanceId);
+	if( ri == NULL ) {
+		ri = new RI;
+		env->SetLongField(instance,instanceId,(jlong)ri);
+	}
+	rj256_set_key(ri, (byte*) key);
 
 	env->ReleaseByteArrayElements(key_, key, 0);
-	env->ReleaseByteArrayElements(block_, block, 0);
+}
+
+JNIEXPORT void JNICALL
+Java_net_sergeych_ttcrypt_RJ256_processBlock(JNIEnv *env, jobject instance, jboolean encrypt,
+											   jbyteArray data_) {
+	byte *data = (byte*) env->GetByteArrayElements(data_, NULL);
+	if( env->GetArrayLength(data_) != 32 )
+		throwError(env, "java/lang/IllegalArgumentException", "wrong rj256 data size");
+	RI* ri = (RI*) env->GetLongField(instance, instanceId);
+	if( ri == NULL )
+		throwError(env, "net/sergeych/ttcrypt/Error", "key is not set");
+
+	if( encrypt )
+		rj256_encrypt( ri, data );
+	else
+		rj256_decrypt( ri, data );
+
+	env->ReleaseByteArrayElements(data_, (jbyte*) data, 0);
+}
+
+JNIEXPORT void JNICALL
+Java_net_sergeych_ttcrypt_RJ256_freeResources(JNIEnv *env, jobject instance) {
+
+	RI* ri = (RI*) env->GetLongField(instance, instanceId);
+	if( ri != NULL ) {
+		delete ri;
+		env->SetLongField(instance, instanceId, (jlong) ri);
+	}
 }
