@@ -20,9 +20,8 @@ static jfieldID instanceId;
 std::shared_ptr<char> bb1;
 std::function<void(void)> *pfun1;
 
-JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_staticInit
+JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_NativeBase_staticInit
 (JNIEnv *env, jclass cls) {
-
 	instanceId = env->GetFieldID(cls, "instancePtr", "J");
 }
 

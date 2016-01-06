@@ -96,7 +96,7 @@ JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_freeResources
  * Method:    staticInit
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_RsaKey_staticInit
+JNIEXPORT void JNICALL Java_net_sergeych_ttcrypt_NativeBase_staticInit
   (JNIEnv *, jclass);
 
 

@@ -21,7 +21,7 @@ import android.util.Log;
  * Created by sergeych on 20.06.14.
  */
 @SuppressLint("DefaultLocale")
-public class RsaKey {
+public class RsaKey extends NativeBase {
 
 	/**
 	 * Any RSA-specific error: wrong padding, message too long, wrong padding,
@@ -217,15 +217,6 @@ public class RsaKey {
 		return RsaKey.fromNE(getN(), getE());
 	}
 
-	/**
-	 * Frees allocated C++ resources
-	 */
-	@Override
-	protected void finalize() {
-		Log.i("RSA", "Freeing up resources");
-		freeResources();
-	}
-
 	public native void testBytes(byte[] data);
 
 	/**
@@ -309,21 +300,4 @@ public class RsaKey {
 
 	private final native boolean _verify(byte[] message, byte[] signature,
 			int hashId);
-
-	private final native void freeResources();
-
-	private long instancePtr;
-
-	// This implements custom static initialization
-	private native static void staticInit();
-
-	public static void initLibrary() {
-	}
-
-	static {
-		// The order is VITAL!
-		System.loadLibrary("gmp");
-		System.loadLibrary("ttcrypt");
-		staticInit();
-	}
 }
